@@ -6,6 +6,7 @@ import { Actors, MovieDetails, NavBar, Profile, Movies } from "./index";
 const App = () => {
   return (
     <div>
+      {/* line */}
       <CssBaseline />
       <NavBar />
       <main>
