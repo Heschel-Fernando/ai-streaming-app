@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import useStyles from "./styles";
 import Sidebar from "../Sidebar";
+import Search from "../Search";
 
 import {
   AppBar,
@@ -13,13 +14,7 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import {
-  Menu,
-  AccountCircle,
-  Brightness4,
-  Brightness7,
-  Brightness1,
-} from "@mui/icons-material";
+import { Menu, AccountCircle, Brightness4, Brightness7, Brightness1 } from "@mui/icons-material";
 
 const NavBar = () => {
   const classes = useStyles();
@@ -49,7 +44,7 @@ const NavBar = () => {
             {theme.palette.mode === "dark" ? <Brightness7 /> : <Brightness4 />}
           </IconButton>
 
-          {!isMobile && "Search..."}
+          {!isMobile && <Search />}
           <div>
             {!isAuthenticated ? (
               <Button color="inherit" onClick={() => {}}>
@@ -72,7 +67,7 @@ const NavBar = () => {
               </Button>
             )}
           </div>
-          {isMobile && "Search..."}
+          {isMobile && <Search />}
         </Toolbar>
       </AppBar>
 

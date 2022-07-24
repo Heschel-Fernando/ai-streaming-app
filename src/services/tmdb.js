@@ -1,7 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const tmdbApiKey = process.env.REACT_APP_TMDB_KEY;
-const page = 1;
 
 export const tmdbApi = createApi({
   reducerPath: "tmdbApi",
@@ -15,8 +14,12 @@ export const tmdbApi = createApi({
     }),
     /* Get Movies by [type] */
     getMovies: builder.query({
-      query: ({ genreOrCategoryName, page }) => {
+      query: ({ genreOrCategoryName, page, searchQuery }) => {
         console.log("tmdb", typeof genreOrCategoryName);
+        /* For movies by Search */
+        if (searchQuery)
+          return `search/movie?api_key=${tmdbApiKey}&language=en-US&query=${searchQuery}&page=${page}`;
+
         /* For movies by Category */
         if (genreOrCategoryName && typeof genreOrCategoryName === "string") {
           return `movie/top_rated?api_key=${tmdbApiKey}&language=en-US&page=${page}`;
