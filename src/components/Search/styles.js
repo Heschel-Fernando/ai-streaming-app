@@ -11,7 +11,7 @@ export default makeStyles((theme) => ({
   input: {
     height: "40px",
     color: theme.palette.mode === "light" && "#0000",
-    filter: theme.palette.mode == "light" && "invert(1)",
+    filter: theme.palette.mode === "light" && "invert(1)",
     [theme.breakpoints.down("sm")]: {
       marginTop: "-3px",
       marginBottom: "10px",
