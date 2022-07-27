@@ -17,7 +17,7 @@ const Movie = ({ movie, i }) => {
             src={
               movie.poster_path
                 ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}`
-                : `https://www.fillmurray.com/200/300`
+                : "https://www.fillmurray.com/200/300"
             }
           />
           <Typography className={classes.title} variant="h5">
@@ -26,7 +26,7 @@ const Movie = ({ movie, i }) => {
 
           <Tooltip disableTouchListener title={`${movie.vote_average} / 10`}>
             <div>
-              <Rating readOnly value={movie.vote_average / 2} precision={0.1}></Rating>
+              <Rating readOnly value={movie.vote_average / 2}></Rating>
             </div>
           </Tooltip>
         </Link>

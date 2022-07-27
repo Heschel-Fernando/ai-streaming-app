@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useGetMovieDetailsQuery } from "../../services/tmdb";
+import { useGetMovieDetailsQuery, useGetRecommendationsQuery } from "../../services/tmdb";
 import useStyles from "./styles";
 import genreIcons from "../../assets/genres";
 
@@ -29,6 +29,7 @@ import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { selectGenreOrCategory } from "../../features/currentGenreOrCategory";
+import MovieList from "../MovieList";
 
 const MovieDetails = () => {
   const dispatch = useDispatch();
@@ -36,8 +37,16 @@ const MovieDetails = () => {
   const { id } = useParams();
   const { data, isFetching, error } = useGetMovieDetailsQuery(id);
 
+  const [open, setOpen] = useState(false);
+
   const isFavorited = false;
   const isWatchListed = false;
+
+  const { data: recommendationData, isFetching: recommendationFetching } = useGetRecommendationsQuery({
+    list: "/recommendations",
+    movie_id: id,
+  });
+  console.log("recommendationData", recommendationData);
 
   const addToFavorites = () => {};
 
@@ -67,11 +76,16 @@ const MovieDetails = () => {
   return (
     <Grid container className={classes.containerSpaceAround}>
       <Grid item sm={12} lg={4}>
-        <img
-          className={classes.poster}
-          src={`https://image.tmdb.org/t/p/w500/${data?.poster_path}`}
-          alt="Movie Poster Image"
-        />
+        {data?.poster_path ? (
+          <img
+            className={classes.poster}
+            src={`https://image.tmdb.org/t/p/w500/${data?.poster_path}`}
+            alt="Movie Poster Image"
+            onClick={() => setOpen(true)}
+          />
+        ) : (
+          <img className={classes.poster} src="https://www.fillmurray.com/200/300" alt="Movie Poster Image" />
+        )}
       </Grid>
 
       <Grid item container direction="column" lg={7}>
@@ -161,7 +175,7 @@ const MovieDetails = () => {
           <div className={classes.buttonsContainer}>
             <Grid item xs={12} sm={6} className={classes.buttonsContainer}>
               <ButtonGroup size="small" variant="outlined">
-                <Button onClick={() => {}} href="#" endIcon={<Theaters />}>
+                <Button onClick={() => setOpen(true)} href="#" endIcon={<Theaters />}>
                   Trailer
                 </Button>
 
@@ -217,6 +231,32 @@ const MovieDetails = () => {
           </div>
         </Grid>
       </Grid>
+
+      <Box marginTop="5rem" width="100%">
+        <Typography variant="h3" gutterBottom align="center">
+          You might also like
+        </Typography>
+        {recommendationData ? (
+          <MovieList movies={recommendationData} numberOfMovies={12} />
+        ) : (
+          <Box>Sorry, we couldn't find any recommendations for this one</Box>
+        )}
+      </Box>
+
+      {data?.poster_path && (
+        <Modal closeAfterTransition className={classes.modal} open={open} onClose={() => setOpen(false)}>
+          {data?.videos?.results?.length > 0 && (
+            <iframe
+              autoPlay
+              className={classes.video}
+              frameBorder="0"
+              title="Trailer"
+              src={`https://www.youtube.com/embed/${data.videos.results[0].key}`}
+              allow="autoplay"
+            />
+          )}
+        </Modal>
+      )}
     </Grid>
   );
 };

@@ -35,7 +35,7 @@ const Movies = () => {
   return (
     <div>
       <div>
-        <MovieList movies={data} />
+        <MovieList movies={data} numberOfMovies={18} />
       </div>
     </div>
   );
