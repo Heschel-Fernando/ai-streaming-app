@@ -28,11 +28,13 @@ const NavBar = () => {
           const { data: userData } = await moviesApi.get(`/account?session_id=${session_id}`);
 
           dispatch(setUser(userData));
+          console.log("user", userData);
         } else {
           const sessionId = await createSessionId();
           const { data: userData } = await moviesApi.get(`/account?session_id=${sessionId}`);
 
           dispatch(setUser(userData));
+          console.log("user", userData);
         }
       }
     };
