@@ -15,13 +15,14 @@ export default makeStyles((theme) => ({
     boxShadow: "0.5em 1em 1em rgb(64.64,70)",
     width: "80%",
     cursor: "pointer",
+    marginLeft: "2rem",
     [theme.breakpoints.down["md"]]: {
-      margin: "0 auto",
+      /* margin: "0 auto", */
       width: "50%",
       height: "350px",
     },
     [theme.breakpoints.down["sm"]]: {
-      margin: "0 auto",
+      /* margin: "0 auto", */
       width: "100%",
       height: "350px",
       marginBottom: "30px",

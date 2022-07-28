@@ -6,7 +6,7 @@ export const tmdbApi = createApi({
   reducerPath: "tmdbApi",
   baseQuery: fetchBaseQuery({ baseUrl: "https://api.themoviedb.org/3" }),
   endpoints: (builder) => ({
-    /* Get Movies by [Type] */
+    /* Get Genres */
     getGenre: builder.query({
       query: () => {
         return `genre/movie/list?api_key=${tmdbApiKey}`;
@@ -21,7 +21,6 @@ export const tmdbApi = createApi({
 
         /* For movies by Category */
         if (genreOrCategoryName && typeof genreOrCategoryName === "string") {
-          /* return `movie/${genreOrCategoryName}?api_key=${tmdbApiKey}&language=en-US&page=${page}`; */
           return `movie/${genreOrCategoryName}?api_key=${tmdbApiKey}&language=en-US&page=${page}`;
         }
 
@@ -44,7 +43,24 @@ export const tmdbApi = createApi({
     getRecommendations: builder.query({
       query: ({ movie_id, list }) => `/movie/${movie_id}/${list}?api_key=${tmdbApiKey}`,
     }),
+
+    /* Get Actor Details */
+    getActorDetails: builder.query({
+      query: (id) => `/person/${id}?api_key=${tmdbApiKey}&language=en-US`,
+    }),
+
+    /* Get Movies of Actor */
+    getMovieOfActor: builder.query({
+      query: (id) => `/person/${id}/movie_credits?api_key=${tmdbApiKey}&language=en-US`,
+    }),
   }),
 });
 
-export const { useGetMoviesQuery, useGetGenreQuery, useGetMovieDetailsQuery, useGetRecommendationsQuery } = tmdbApi;
+export const {
+  useGetMoviesQuery,
+  useGetGenreQuery,
+  useGetMovieDetailsQuery,
+  useGetRecommendationsQuery,
+  useGetActorDetailsQuery,
+  useGetMovieOfActorQuery,
+} = tmdbApi;

@@ -52,7 +52,7 @@ const MovieDetails = () => {
 
   const addToWatchlist = () => {};
 
-  if (isFetching) {
+  if (isFetching || recommendationFetching) {
     return (
       <Box display="flex" justifyContent="center">
         <CircularProgress size="8rem"></CircularProgress>
@@ -87,9 +87,8 @@ const MovieDetails = () => {
           <img className={classes.poster} src="https://www.fillmurray.com/200/300" alt="Movie Poster Image" />
         )}
       </Grid>
-
       <Grid item container direction="column" lg={7}>
-        <Typography variant="h3" align="center" gutterBottom>
+        <Typography style={{ marginInline: "auto" }} variant="h3" align="center" gutterBottom>
           {data?.title} ({data?.release_date.split("-")[0]})
         </Typography>
         <Typography style={{ marginBottom: "40px", marginTop: "30px" }} variant="h5" align="center" gutterBottom>
@@ -104,8 +103,8 @@ const MovieDetails = () => {
             </Typography>
           </Box>
 
-          <Typography variant="h6" align="center" gutterBottom>
-            {data?.runtime} {` min / ${data?.spoken_languages.length > 0 ? data?.spoken_languages[0].name : ""}`}
+          <Typography variant="body1" align="center" gutterBottom>
+            {data?.runtime} {` min / ${data?.spoken_languages.length > 0 ? ` ${data?.spoken_languages[0].name}` : ""}`}
           </Typography>
         </Grid>
 
@@ -231,19 +230,20 @@ const MovieDetails = () => {
           </div>
         </Grid>
       </Grid>
-
       <Box marginTop="5rem" width="100%">
         <Typography variant="h3" gutterBottom align="center">
           You might also like
         </Typography>
-        {recommendationData ? (
-          <MovieList movies={recommendationData} numberOfMovies={12} />
+        {recommendationData?.results.length > 0 ? (
+          <MovieList type="non_actor" movies={recommendationData} numberOfMovies={12} />
         ) : (
-          <Box>Sorry, we couldn't find any recommendations for this one</Box>
+          <Box style={{ marginTop: "2rem" }} display="flex" justifyContent="center">
+            Sorry, we couldn't find any recommendations for this one
+          </Box>
         )}
       </Box>
 
-      {data?.poster_path && (
+      {data?.poster_path && data?.videos.results.length > 0 && (
         <Modal closeAfterTransition className={classes.modal} open={open} onClose={() => setOpen(false)}>
           {data?.videos?.results?.length > 0 && (
             <iframe
