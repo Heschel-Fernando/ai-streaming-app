@@ -53,7 +53,9 @@ const Actors = () => {
             {data?.name}
           </Typography>
           <Typography variant="h5" gutterBottom>
-            Birthday: {new Date(data?.birthday).toDateString()}
+            Birthday: {new Date(data?.birthday).toLocaleString("default", { month: "short" })}{" "}
+            {+new Date(data?.birthday).toLocaleString("default", { day: "2-digit" }) + 1}{" "}
+            {new Date(data?.birthday).toLocaleString("default", { year: "numeric" })}
           </Typography>
           <Typography variant="body1" align="justify" gutterBottom>
             {data?.biography || (

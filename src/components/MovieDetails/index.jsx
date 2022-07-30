@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useGetMovieDetailsQuery, useGetRecommendationsQuery } from "../../services/tmdb";
+import { useGetMovieDetailsQuery, useGetRecommendationsQuery, useGetUserListQuery } from "../../services/tmdb";
 import useStyles from "./styles";
 import genreIcons from "../../assets/genres";
 
@@ -30,27 +30,74 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { selectGenreOrCategory } from "../../features/currentGenreOrCategory";
 import MovieList from "../MovieList";
+import { userSelector } from "../../features/auth";
 
 const MovieDetails = () => {
+  const { user } = useSelector(userSelector);
+  const { id } = useParams();
   const dispatch = useDispatch();
   const classes = useStyles();
-  const { id } = useParams();
+  const tmdbApiKey = process.env.REACT_APP_TMDB_KEY;
+
   const { data, isFetching, error } = useGetMovieDetailsQuery(id);
-
-  const [open, setOpen] = useState(false);
-
-  const isFavorited = false;
-  const isWatchListed = false;
-
   const { data: recommendationData, isFetching: recommendationFetching } = useGetRecommendationsQuery({
     list: "/recommendations",
     movie_id: id,
   });
-  console.log("recommendationData", recommendationData);
+  const { data: favoriteMovies } = useGetUserListQuery({
+    accountId: user.id,
+    sessionId: localStorage.getItem("session_id"),
+    type: "favorite",
+    page: 1,
+  });
+  const { data: watchlistedMovies } = useGetUserListQuery({
+    accountId: user.id,
+    sessionId: localStorage.getItem("session_id"),
+    type: "watchlist",
+    page: 1,
+  });
 
-  const addToFavorites = () => {};
+  const [open, setOpen] = useState(false);
+  const [isFavorited, setIsFavorited] = useState(false);
+  const [isWatchlisted, setisWatchlisted] = useState(false);
 
-  const addToWatchlist = () => {};
+  useEffect(() => {
+    setIsFavorited(!!favoriteMovies?.results?.find((movie) => movie.id === data?.id));
+  }, [favoriteMovies, data]);
+
+  useEffect(() => {
+    setisWatchlisted(!!watchlistedMovies?.results?.find((movie) => movie.id === data?.id));
+  }, [watchlistedMovies, data]);
+
+  const addToFavorites = async () => {
+    await axios.post(
+      `https://api.themoviedb.org/3/account/${user.id}/favorite?api_key=${tmdbApiKey}&session_id=${localStorage.getItem(
+        "session_id"
+      )}`,
+      {
+        media_type: "movie",
+        media_id: id,
+        favorite: !isFavorited,
+      }
+    );
+    console.log("favorited");
+    setIsFavorited((prevState) => !prevState);
+  };
+
+  const addToWatchlist = async () => {
+    await axios.post(
+      `https://api.themoviedb.org/3/account/${
+        user.id
+      }/watchlist?api_key=${tmdbApiKey}&session_id=${localStorage.getItem("session_id")}`,
+      {
+        media_type: "movie",
+        media_id: id,
+        watchlist: !isWatchlisted,
+      }
+    );
+    console.log("watchlisted");
+    setisWatchlisted((prevState) => !prevState);
+  };
 
   if (isFetching || recommendationFetching) {
     return (
@@ -59,8 +106,6 @@ const MovieDetails = () => {
       </Box>
     );
   }
-
-  console.log("details", data);
 
   if (error) {
     return (
@@ -123,7 +168,7 @@ const MovieDetails = () => {
                 height={30}
               />
               <Typography color="textPrimary" variant="subtitle1">
-                {genre?.name}
+                {genre?.name ? genre?.name : ""}
               </Typography>
             </Link>
           ))}
@@ -134,7 +179,7 @@ const MovieDetails = () => {
         </Typography>
 
         <Typography gutterBottom style={{ marginBottom: "40px" }}>
-          {data?.overview}
+          {data?.overview ? data?.overview : "Sorry, no overview was provided for this movie"}
         </Typography>
 
         <Typography variant="h5" gutterBottom>
@@ -211,7 +256,7 @@ const MovieDetails = () => {
                 </Button>
 
                 <Button style={{ marginRight: "10px" }} onClick={addToWatchlist}>
-                  {isFavorited ? "- Watchlist" : "+ Watchlist"}
+                  {isWatchlisted ? "- Watchlist" : "+ Watchlist"}
                 </Button>
 
                 <Button sx={{ borderColor: "primary.main" }} endIcon={<ArrowBack />}>

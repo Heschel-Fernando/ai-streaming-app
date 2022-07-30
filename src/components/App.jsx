@@ -25,7 +25,7 @@ const App = () => {
               <Actors />
             </h2>
           </Route>
-          <Route exact path="/">
+          <Route exact path={["/", "/approved"]}>
             <h2>
               <Movies />
             </h2>

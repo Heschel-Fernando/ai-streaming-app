@@ -11,7 +11,6 @@ export const genreOrCategory = createSlice({
     selectGenreOrCategory: (state, action) => {
       state.genreOrCategoryName = action.payload;
       state.searchQuery = "";
-      state.page = 1;
     },
     searchMovie: (state, action) => {
       state.searchQuery = action.payload;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import useStyles from "./styles";
 import Sidebar from "../Sidebar";
@@ -9,14 +9,17 @@ import { AppBar, IconButton, Toolbar, Drawer, Button, Avatar, useMediaQuery, use
 import { Menu, AccountCircle, Brightness4, Brightness7, Brightness1 } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser, userSelector } from "../../features/auth";
+import { ColorModeCxt } from "../../utils/ToggleDarkMode";
 
 const NavBar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { isAuthenticated, user } = useSelector(userSelector);
+
   const classes = useStyles();
   const isMobile = useMediaQuery(`(max-width:600px)`);
   const theme = useTheme();
-  const { isAuthenticated, user } = useSelector(userSelector);
   const dispatch = useDispatch();
+  const colorMode = useContext(ColorModeCxt);
 
   const token = localStorage.getItem("request_token");
   const session_id = localStorage.getItem("session_id");
@@ -58,7 +61,7 @@ const NavBar = () => {
             </IconButton>
           )}
 
-          <IconButton color="inherit" sx={{ ml: 1 }} onClick={() => {}}>
+          <IconButton color="inherit" sx={{ ml: 1 }} onClick={colorMode.ToggleColorMode}>
             {theme.palette.mode === "dark" ? <Brightness7 /> : <Brightness4 />}
           </IconButton>
 
@@ -76,7 +79,7 @@ const NavBar = () => {
                 className={classes.linkButton}
                 onClick={() => {}}
               >
-                {!isMobile && <> My Movies &nbsp; </>}
+                {!isMobile && <> My Profile &nbsp; </>}
                 <Avatar
                   style={{ height: "30px", width: "30px" }}
                   alt="profile"
