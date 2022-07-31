@@ -52,7 +52,7 @@ const Sidebar = ({ setMobileOpen }) => {
   return (
     <React.Fragment>
       <Link to="/" className={classes.imageLink}>
-        <img className={classes.image} src={theme.palette.mode === "light" ? redLogo : blueLogo} alt="Logo" />
+        <img className={classes.image} src={theme.palette.mode === "light" ? blueLogo : redLogo} alt="Logo" />
       </Link>
 
       <Divider />
