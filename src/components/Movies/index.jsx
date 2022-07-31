@@ -42,7 +42,7 @@ const Movies = () => {
   return (
     <div>
       <div>
-        <FeaturedMovie movie={data?.results[0]} />
+        <FeaturedMovie movie={data?.results[1]} />
         <MovieList type="non_actor" movies={data} numberOfMovies={numberOfMovies} />
         <PaginationComp currentPage={page} setPage={setpage} totalPages={data?.total_pages} />
       </div>
