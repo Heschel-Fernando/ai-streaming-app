@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import genreIcons from "../../assets/genres";
 import { useDispatch, useSelector } from "react-redux";
+import redLogo from "../../assets/images/red_logo.png";
+import blueLogo from "../../assets/images/blue_logo.png";
 
 import useStyles from "./styles";
 import {
@@ -19,8 +21,8 @@ import { useTheme } from "@mui/styles";
 import { useGetGenreQuery } from "../../services/tmdb";
 import { selectGenreOrCategory } from "../../features/currentGenreOrCategory";
 
-const blueLogo = "https://fontmeme.com/permalink/210930/8531c658a743debe1e1aa1a2fc82006e.png";
-const redLogo = "https://fontmeme.com/permalink/210930/6854ae5c7f76597cf8680e48a2c8a50a.png";
+/* const blueLogo = "https://fontmeme.com/permalink/210930/8531c658a743debe1e1aa1a2fc82006e.png";
+const redLogo = "https://fontmeme.com/permalink/210930/6854ae5c7f76597cf8680e48a2c8a50a.png"; */
 
 const categories = [
   {
